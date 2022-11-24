@@ -38,7 +38,11 @@ def start(message):
     bot.send_message(message.chat.id, message_text, parse_mode='Markdown', disable_web_page_preview=True, reply_markup=markup)
 # endregion Команда START
 
-
+def LCM(x, y):
+    maxi = max(x, y)
+    for i in range(maxi, 1000000):
+        if i % x == 0 and i % y == 0:
+            return i
 
 
 @bot.message_handler(content_types=['text'])
@@ -63,7 +67,7 @@ def mess(message):
             n = int(M[4])
 
             if s == '+':
-                NOK = math.lcm(b, n)
+                NOK = LCM(b, n)
 
                 a = a * (NOK // b)
                 m = m * (NOK // n)
@@ -105,7 +109,7 @@ def mess(message):
             n = int(M[4])
 
             if s == '-':
-                NOK = math.lcm(b, n)
+                NOK = LCM(b, n)
 
                 a = a * (NOK // b)
                 m = m * (NOK // n)
@@ -136,53 +140,61 @@ def mess(message):
     # endregion Кнопка: Разность дробей
 
     # region Кнопка: Умножение дробей
-    if get_message_bot == "умножение дробей":
-        bot.send_message(message.chat.id, 'Введите две дроби и знак операции между ними в формате: [a b * m n]')
+    if get_message_bot == "умножение дробей":  # запрос обрабатывает текстовое сообщение умножение дробей
+        bot.send_message(message.chat.id, 'Введите две дроби и знак операции между ними в формате: [a b * m n]')  # бот отправляет сообщение по id пользователя
 
-        @bot.message_handler(content_types=['text'])
-        def message_input(message):
+        @bot.message_handler(content_types=['text'])  # функция которая обрабатывает запросы с текстовыми сообщениями
+        def message_input(message):  # функция
             text_message = message.text
+            try:
+                M = [i for i in text_message.split()]
 
-            M = [i for i in text_message.split()]
+                a = int(M[0])
+                b = int(M[1])
+                s = M[2]
+                m = int(M[3])
+                n = int(M[4])
 
-            a = int(M[0])
-            b = int(M[1])
-            s = M[2]
-            m = int(M[3])
-            n = int(M[4])
+                if s == '*':
+                    NOK = LCM(b, n)
 
-            if s == '*':
-                NOK = math.lcm(b, n)
-
-                x = a * m
-                znam = b * n
-
-
-                cel = (x) // znam
-                ost = (x) % znam
-
-                NOD = math.gcd(ost, znam)
+                    x = a * m
+                    znam = b * n
 
 
-                bot.send_message(message.chat.id, f'Умножили и две дроби: {a * m}/{znam}')
+                    cel = (x) // znam
+                    ost = (x) % znam
 
-                if a * m < 0:
-                    cel = ((a * m) // znam) + 1
-                    ost = -((a * m) % znam)
+                    NOD = math.gcd(ost, znam)
+
+
+                    bot.send_message(message.chat.id, f'Умножили и две дроби: {a * m}/{znam}')
+
+                    if a * m < 0:
+                        cel = ((a * m) // znam) + 1
+                        ost = -((a * m) % znam)
+                    else:
+                        cel = (a * m) // znam
+                        ost = (a * m) % znam
+
+                    NOD = math.gcd(ost, znam)
+
+                    if cel != 0:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
+                    else:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
                 else:
-                    cel = (a * m) // znam
-                    ost = (a * m) % znam
+                    bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак *')
 
-                NOD = math.gcd(ost, znam)
-
-                if cel != 0:
-                    bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
-                else:
-                    bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
-            else:
-                bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак *')
-
-        bot.register_next_step_handler(message, message_input)
+            except IndexError:
+                bot.send_message(message.chat.id,
+                             f"Ввели недостаточно символов, [подробнее об ошибке](https://ru.stackoverflow.com/questions/1377838/%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D1%8F-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-indexerror-list-index-out-of-range-%D0%B8-%D0%BA%D0%B0%D0%BA-%D0%B5%D0%B5-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C)",
+                             parse_mode="Markdown", disable_web_page_preview=True)
+            except ValueError:
+                bot.send_message(message.chat.id,
+                                 f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)",
+                                 parse_mode="Markdown", disable_web_page_preview=True)
+    bot.register_next_step_handler(message, message_input)
     # endregion Кнопка: Умножение дробей
 
     # region Кнопка: Деление дробей
