@@ -3,7 +3,7 @@ from telebot import types
 import time
 import math
 
-bot = telebot.TeleBot('5722699716:AAHsHv5KPPst7nLqZ9jPLLU8IgzbiBIcy5M')
+bot = telebot.TeleBot('5722699716:AAGykIOB_7HtI-xPMD8sI5KHdTYFt9UNdwI')
 
 # 👉 🙏 👆 👇 😅 👋 🙌 ☺️ ❗ ️‼️ ✌️ 👌 ✊ 👨‍💻  🤖 😉  ☝️ ❤️ 💪 ✍️ 🎯  ⛔  ️✅ 📊📈🧮   🗳️
 
@@ -48,7 +48,7 @@ def LCM(x, y):
 @bot.message_handler(content_types=['text'])
 def mess(message):
     get_message_bot = message.text.strip()
-    get_message_bot = message.text.lower()
+    get_message_bot = get_message_bot.lower()
 
     # region Кнопка: Сумма дробей
     if get_message_bot == "сумма дробей":
@@ -93,15 +93,13 @@ def mess(message):
                              f"Ввели недостаточно символов, [подробнее об ошибке](https://ru.stackoverflow.com/questions/1377838/%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D1%8F-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-indexerror-list-index-out-of-range-%D0%B8-%D0%BA%D0%B0%D0%BA-%D0%B5%D0%B5-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C)",
                              parse_mode="Markdown", disable_web_page_preview=True)
             except ValueError:
-                bot.send_message(message.chat.id,
-                                 f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)",
-                                 parse_mode="Markdown", disable_web_page_preview=True)
+                bot.send_message(message.chat.id, f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)", parse_mode="Markdown", disable_web_page_preview=True)
 
         bot.register_next_step_handler(message, message_input)
     # endregion Кнопка: Сумма дробей
 
     # region Кнопка: Разность дробей
-    elif get_message_bot == "разность дробей":
+    if get_message_bot == "разность дробей":
         bot.send_message(message.chat.id, 'Введите две дроби и знак операции между ними в формате: [a b - m n]')
 
         @bot.message_handler(content_types=['text'])
@@ -210,12 +208,66 @@ def mess(message):
                 bot.send_message(message.chat.id,
                                  f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)",
                                  parse_mode="Markdown", disable_web_page_preview=True)
-    bot.register_next_step_handler(message, message_input)
+        bot.register_next_step_handler(message, message_input)
     # endregion Кнопка: Умножение дробей
 
     # region Кнопка: Деление дробей
-    if get_message_bot == "деление дробей":
-        pass
+    if get_message_bot == "деление дробей":  # запрос обрабатывает текстовое сообщение умножение дробей
+        bot.send_message(message.chat.id, 'Введите две дроби и знак операции между ними в формате: [a b / m n]')  # бот отправляет сообщение по id пользователя
+
+        @bot.message_handler(content_types=['text'])  # функция которая обрабатывает запросы с текстовыми сообщениями
+        def message_input(message):  # функция
+            text_message = message.text
+            try:
+                M = [i for i in text_message.split()]
+
+                a = int(M[0])
+                b = int(M[1])
+                s = M[2]
+                m = int(M[3])
+                n = int(M[4])
+
+                if s == '/':
+                    NOK = LCM(b, n)
+
+                    x = a * n
+                    znam = b * m
+
+
+                    cel = (x) // znam
+                    ost = (x) % znam
+
+                    NOD = math.gcd(ost, znam)
+
+
+                    bot.send_message(message.chat.id, f'Умножили и две дроби: {x}/{znam}')
+
+                    if x < 0:
+                        cel = ((x) // znam) + 1
+                        ost = -((x) % znam)
+                    else:
+                        cel = (x) // znam
+                        ost = (x) % znam
+
+                    NOD = math.gcd(ost, znam)
+
+                    if cel != 0:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
+                    else:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
+                else:
+                    bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак *')
+
+            except IndexError:
+                bot.send_message(message.chat.id,
+                             f"Ввели недостаточно символов, [подробнее об ошибке](https://ru.stackoverflow.com/questions/1377838/%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D1%8F-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-indexerror-list-index-out-of-range-%D0%B8-%D0%BA%D0%B0%D0%BA-%D0%B5%D0%B5-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C)",
+                             parse_mode="Markdown", disable_web_page_preview=True)
+            except ValueError:
+                bot.send_message(message.chat.id,
+                                 f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)",
+                                 parse_mode="Markdown", disable_web_page_preview=True)
+
+        bot.register_next_step_handler(message, message_input)
     # endregion Кнопка: Деление дробей
 
 
