@@ -57,37 +57,45 @@ def mess(message):
         @bot.message_handler(content_types=['text'])
         def message_input(message):
             text_message = message.text
+            try:
+                M = [i for i in text_message.split()]
 
-            M = [i for i in text_message.split()]
+                a = int(M[0])
+                b = int(M[1])
+                s = M[2]
+                m = int(M[3])
+                n = int(M[4])
 
-            a = int(M[0])
-            b = int(M[1])
-            s = M[2]
-            m = int(M[3])
-            n = int(M[4])
+                if s == '+':
+                    NOK = LCM(b, n)
 
-            if s == '+':
-                NOK = LCM(b, n)
+                    a = a * (NOK // b)
+                    m = m * (NOK // n)
+                    znam = n * (NOK // n)
 
-                a = a * (NOK // b)
-                m = m * (NOK // n)
-                znam = n * (NOK // n)
+                    bot.send_message(message.chat.id, f'Приводим к общему наименьшему знаменателю: {a}/{znam} {s} {m}/{znam}')
 
-                bot.send_message(message.chat.id, f'Приводим к общему наименьшему знаменателю: {a}/{znam} {s} {m}/{znam}')
+                    bot.send_message(message.chat.id, f'Сложили две дроби: {a + m}/{znam}')
 
-                bot.send_message(message.chat.id, f'Сложили две дроби: {a + m}/{znam}')
+                    cel = (a + m) // znam
+                    ost = (a + m) % znam
 
-                cel = (a + m) // znam
-                ost = (a + m) % znam
+                    NOD = math.gcd(ost, znam)
 
-                NOD = math.gcd(ost, znam)
-
-                if cel != 0:
-                    bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
+                    if cel != 0:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
+                    else:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
                 else:
-                    bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
-            else:
-                bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак +')
+                    bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак +')
+            except IndexError:
+                bot.send_message(message.chat.id,
+                             f"Ввели недостаточно символов, [подробнее об ошибке](https://ru.stackoverflow.com/questions/1377838/%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D1%8F-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-indexerror-list-index-out-of-range-%D0%B8-%D0%BA%D0%B0%D0%BA-%D0%B5%D0%B5-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C)",
+                             parse_mode="Markdown", disable_web_page_preview=True)
+            except ValueError:
+                bot.send_message(message.chat.id,
+                                 f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)",
+                                 parse_mode="Markdown", disable_web_page_preview=True)
 
         bot.register_next_step_handler(message, message_input)
     # endregion Кнопка: Сумма дробей
@@ -99,42 +107,50 @@ def mess(message):
         @bot.message_handler(content_types=['text'])
         def message_input(message):
             text_message = message.text
+            try:
+                M = [i for i in text_message.split()]
 
-            M = [i for i in text_message.split()]
+                a = int(M[0])
+                b = int(M[1])
+                s = M[2]
+                m = int(M[3])
+                n = int(M[4])
 
-            a = int(M[0])
-            b = int(M[1])
-            s = M[2]
-            m = int(M[3])
-            n = int(M[4])
+                if s == '-':
+                    NOK = LCM(b, n)
 
-            if s == '-':
-                NOK = LCM(b, n)
+                    a = a * (NOK // b)
+                    m = m * (NOK // n)
+                    znam = n * (NOK // n)
 
-                a = a * (NOK // b)
-                m = m * (NOK // n)
-                znam = n * (NOK // n)
+                    bot.send_message(message.chat.id, f'Приводим к общему наименьшему знаменателю: {a}/{znam} {s} {m}/{znam}')
 
-                bot.send_message(message.chat.id, f'Приводим к общему наименьшему знаменателю: {a}/{znam} {s} {m}/{znam}')
-
-                bot.send_message(message.chat.id, f'Вычли две дроби: {a - m}/{znam}')
+                    bot.send_message(message.chat.id, f'Вычли две дроби: {a - m}/{znam}')
 
 
-                if a - m < 0:
-                    cel = ((a - m) // znam) + 1
-                    ost = - (abs(a - m) % znam)
+                    if a - m < 0:
+                        cel = ((a - m) // znam) + 1
+                        ost = - (abs(a - m) % znam)
+                    else:
+                        cel = ((a - m) // znam)
+                        ost = (a - m) % znam
+
+                    NOD = math.gcd(ost, znam)
+
+                    if cel != 0:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
+                    else:
+                        bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
                 else:
-                    cel = ((a - m) // znam)
-                    ost = (a - m) % znam
-
-                NOD = math.gcd(ost, znam)
-
-                if cel != 0:
-                    bot.send_message(message.chat.id, f'Результат арифметического действия: {cel} ({ost // NOD}/{znam // NOD})')
-                else:
-                    bot.send_message(message.chat.id, f'Результат арифметического действия: ({ost // NOD}/{znam // NOD})')
-            else:
-                bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак -')
+                    bot.send_message(message.chat.id, 'Неверный знак операции! Используйте знак -')
+            except IndexError:
+                bot.send_message(message.chat.id,
+                             f"Ввели недостаточно символов, [подробнее об ошибке](https://ru.stackoverflow.com/questions/1377838/%D0%9F%D0%BE%D1%87%D0%B5%D0%BC%D1%83-%D1%8F-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-indexerror-list-index-out-of-range-%D0%B8-%D0%BA%D0%B0%D0%BA-%D0%B5%D0%B5-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C)",
+                             parse_mode="Markdown", disable_web_page_preview=True)
+            except ValueError:
+                bot.send_message(message.chat.id,
+                                 f"Сначала введите два числа,знак, потом ещё два числа, [подробнее об ошибке](https://pythonim.ru/osnovy/valueerror-python)",
+                                 parse_mode="Markdown", disable_web_page_preview=True)
 
         bot.register_next_step_handler(message, message_input)
     # endregion Кнопка: Разность дробей
