@@ -8,86 +8,210 @@ bot = telebot.TeleBot('5722699716:AAGykIOB_7HtI-xPMD8sI5KHdTYFt9UNdwI')
 
 # 👉 🙏 👆 👇 😅 👋 🙌 ☺️ ❗ ️‼️ ✌️ 👌 ✊ 👨‍💻  🤖 😉  ☝️ ❤️ 💪 ✍️ 🎯  ⛔  ️✅ 📊📈🧮   🗳️
 
+
 #todo: 1. Поменять оформление для умножений, делений по аналогии с суммой.
 #todo: 2. Поменять оформление разметки Markdown в делении и умножении
 #todo: 3. Фиксить команду разности
-#todo: 4. Развиваем игру тренировку /game
-#todo: 5. Делаем команду preview о проекте
+#todo: 4. Написание базы данных о пользователях
+#todo: 5. Оформляем команду creators, добавить список комманд
+#todo: 6. Публикация на хостинге
+
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def step(call):
     markup = telebot.types.InlineKeyboardMarkup(row_width=1)
 
-    if call.data == 'key':
-        pass
+    if call.data == 'lvl_1':
+        M = ['+', '-']
+        a = random.randint(1, 10)
+        b = random.randint(1, 10)
+        s = random.choice(M)
+        m = random.randint(1, 10)
+        n = random.randint(1, 10)
+        bot.send_message(call.message.chat.id, f'Решите пример: `({a}/{b}) {s} ({m}/{n}) = `', parse_mode='Markdown')
+
+        if s == '+':
+            NOK = LCM(b, n)
+
+            a = a * (NOK // b)
+            m = m * (NOK // n)
+            znam = n * (NOK // n)
+
+            r = f'{a + m}/{znam}'
+
+        elif s == '-':
+            NOK = LCM(b, n)
+
+            a = a * (NOK // b)
+            m = m * (NOK // n)
+            znam = n * (NOK // n)
+
+            r = f'{a - m}/{znam}'
+
+
+
+        @bot.message_handler(content_types=['text'])
+        def message_input(message):
+            x = message.text
+            Markup = types.InlineKeyboardMarkup(row_width=1)
+            Markup.add(types.InlineKeyboardButton("Получить ещё пример", callback_data="lvl_1"))
+            if x == r:
+                bot.send_message(call.message.chat.id, f'Верно! Сменить уровень сложности 👉 /game', parse_mode='Markdown', reply_markup=Markup)
+            else:
+                bot.send_message(call.message.chat.id, f'Неверно! Попробуйте сменить уровень сложности 👉 /game',
+                                 parse_mode='Markdown', reply_markup=Markup)
+
+        bot.register_next_step_handler(call.message, message_input)
+
+    if call.data == 'lvl_2':
+        M = ['+', '-', '*', '/']
+        a = random.randint(1, 25)
+        b = random.randint(1, 25)
+        s = random.choice(M)
+        m = random.randint(1, 25)
+        n = random.randint(1, 25)
+        bot.send_message(call.message.chat.id, f'Решите пример: `({a}/{b}) {s} ({m}/{n}) = `', parse_mode='Markdown')
+
+        if s == '+':
+            NOK = LCM(b, n)
+
+            a = a * (NOK // b)
+            m = m * (NOK // n)
+            znam = n * (NOK // n)
+
+            r = f'{a + m}/{znam}'
+
+        elif s == '-':
+            NOK = LCM(b, n)
+
+            a = a * (NOK // b)
+            m = m * (NOK // n)
+            znam = n * (NOK // n)
+
+            r = f'{a - m}/{znam}'
+
+        elif s == '*':
+            NOK = LCM(b, n)
+
+            x = a * m
+            znam = b * n
+
+            cel = (x) // znam
+            ost = (x) % znam
+
+            NOD = math.gcd(ost, znam)
+
+            r = f'{a * m}/{znam}'
+
+        elif s == '/':
+            NOK = LCM(b, n)
+
+            x = a * n
+            znam = b * m
+
+            cel = (x) // znam
+            ost = (x) % znam
+
+            NOD = math.gcd(ost, znam)
+
+            r = f'{x}/{znam}'
+
+        @bot.message_handler(content_types=['text'])
+        def message_input(message):
+            x = message.text
+            Markup = types.InlineKeyboardMarkup(row_width=1)
+            Markup.add(types.InlineKeyboardButton("Получить ещё пример", callback_data="lvl_2"))
+            if x == r:
+                bot.send_message(call.message.chat.id, f'Верно! Сменить уровень сложности 👉 /game', parse_mode='Markdown', reply_markup=Markup)
+            else:
+                bot.send_message(call.message.chat.id, f'Неверно! Попробуйте сменить уровень сложности 👉 /game',
+                                 parse_mode='Markdown', reply_markup=Markup)
+
+        bot.register_next_step_handler(call.message, message_input)
+
+    if call.data == 'lvl_3':
+        M = ['+', '-', '*', '/']
+        a = random.randint(1, 50)
+        b = random.randint(1, 50)
+        s = random.choice(M)
+        m = random.randint(1, 50)
+        n = random.randint(1, 50)
+        bot.send_message(call.message.chat.id, f'Решите пример: `({a}/{b}) {s} ({m}/{n}) = `', parse_mode='Markdown')
+
+        if s == '+':
+            NOK = LCM(b, n)
+
+            a = a * (NOK // b)
+            m = m * (NOK // n)
+            znam = n * (NOK // n)
+
+            r = f'{a + m}/{znam}'
+
+        elif s == '-':
+            NOK = LCM(b, n)
+
+            a = a * (NOK // b)
+            m = m * (NOK // n)
+            znam = n * (NOK // n)
+
+            r = f'{a - m}/{znam}'
+
+        elif s == '*':
+            NOK = LCM(b, n)
+
+            x = a * m
+            znam = b * n
+
+            cel = (x) // znam
+            ost = (x) % znam
+
+            NOD = math.gcd(ost, znam)
+
+            r = f'{a * m}/{znam}'
+
+        elif s == '/':
+            NOK = LCM(b, n)
+
+            x = a * n
+            znam = b * m
+
+            cel = (x) // znam
+            ost = (x) % znam
+
+            NOD = math.gcd(ost, znam)
+
+            r = f'{x}/{znam}'
+
+        @bot.message_handler(content_types=['text'])
+        def message_input(message):
+            x = message.text
+            Markup = types.InlineKeyboardMarkup(row_width=1)
+            Markup.add(types.InlineKeyboardButton("Получить ещё пример", callback_data="lvl_3"))
+            if x == r:
+                bot.send_message(call.message.chat.id, f'Верно! Сменить уровень сложности 👉 /game', parse_mode='Markdown', reply_markup=Markup)
+            else:
+                bot.send_message(call.message.chat.id, f'Неверно! Попробуйте сменить уровень сложности 👉 /game',
+                                 parse_mode='Markdown', reply_markup=Markup)
+
+        bot.register_next_step_handler(call.message, message_input)
 
 # region Команда GAME
 @bot.message_handler(commands=['game'])
 def game(message):
-    M = ['+', '-', '*', '/']
-    a = random.randint(1, 10)
-    b = random.randint(1, 10)
-    s = random.choice(M)
-    m = random.randint(1, 10)
-    n = random.randint(1, 10)
-    bot.send_message(message.chat.id, f'Решите пример: `{a}/{b} {s} {m}/{n} = `', parse_mode='Markdown')
+    Markup = types.InlineKeyboardMarkup(row_width=1)
+    Markup.add(types.InlineKeyboardButton("Лёгкий уровень", callback_data="lvl_1"),
+               types.InlineKeyboardButton("Средний уровень", callback_data="lvl_2"),
+               types.InlineKeyboardButton("Сложный уровень", callback_data="lvl_3"))
+    bot.send_message(message.chat.id, f'Добро пожаловать в наш тренажёр для *счёта правильных и неправильных дробей*. \n\n 🤖 Бот принимает ответы вида: *a/b*\n\nЧем выше уровень, тем больше числа', parse_mode='Markdown', reply_markup=Markup)
 
-    if s == '+':
-        NOK = LCM(b, n)
-
-        a = a * (NOK // b)
-        m = m * (NOK // n)
-        znam = n * (NOK // n)
-
-        r = f'{a + m}/{znam}'
-
-    elif s == '-':
-        NOK = LCM(b, n)
-
-        a = a * (NOK // b)
-        m = m * (NOK // n)
-        znam = n * (NOK // n)
-
-        r = f'{a - m}/{znam}'
-
-    elif s == '*':
-        NOK = LCM(b, n)
-
-        x = a * m
-        znam = b * n
-
-        cel = (x) // znam
-        ost = (x) % znam
-
-        NOD = math.gcd(ost, znam)
-
-        r = f'{a * m}/{znam}'
-
-    elif s == '/':
-        NOK = LCM(b, n)
-
-        x = a * n
-        znam = b * m
-
-        cel = (x) // znam
-        ost = (x) % znam
-
-        NOD = math.gcd(ost, znam)
-
-        r = f'{x}/{znam}'
+# region Команда CREATORS
+@bot.message_handler(commands=['creators'])
+def creators(message):
+    bot.send_message(message.chat.id, f'Этот бот был создан нами (student: @yanikam22 and teacher: @ilandroxy) в качестве учебного проекта для ознакомления с библиотекой telebot и закрепления на практике пройденной теории языка python. ', parse_mode='Markdown')
 
 
 
-    @bot.message_handler(content_types=['text'])
-    def message_input(message):
-        x = message.text
-        if x == r:
-            bot.send_message(message.chat.id, f'Верно, еще пример 👉 /game', parse_mode='Markdown')
-        else:
-            bot.send_message(message.chat.id, f'Неверно! попробуйте еще один пример 👉 /game', parse_mode='Markdown')
-
-    bot.register_next_step_handler(message, message_input)
 
 
 # region Команда START
