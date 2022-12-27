@@ -1,4 +1,4 @@
+import time
 
-
-print(-22 // 10)
-print(-2 % 10)
+day = time.strftime('%c')
+print(day)
