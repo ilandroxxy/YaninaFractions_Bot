@@ -20,6 +20,8 @@ parts/
 sdist/
 venv/
 .idea/
+.DS_Store
+test.py
 var/
 wheels/
 pip-wheel-metadata/
