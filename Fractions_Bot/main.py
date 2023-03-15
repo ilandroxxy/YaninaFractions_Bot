@@ -6,6 +6,9 @@ import math
 import random
 import sqlite3
 
+
+
+# bot = telebot.TeleBot(f'{open("token.txt").read().strip()}')
 bot = telebot.TeleBot('5722699716:AAGykIOB_7HtI-xPMD8sI5KHdTYFt9UNdwI')
 
 # 👉 🙏 👆 👇 😅 👋 🙌 ☺️ ❗ ️‼️ ✌️ 👌 ✊ 👨‍💻  🤖 😉  ☝️ ❤️ 💪 ✍️ 🎯  ⛔  ️✅ 📊📈🧮   🗳️
